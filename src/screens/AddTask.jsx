@@ -47,7 +47,7 @@ function AddTask() {
         ImgURL = data.publicUrl
       }
     }
-    const { error } = await supabase.from('lachadb')
+    const { error } = await supabase.from('lachaDB')
       .insert({
         Title: Title,
         Detail: Detail,
