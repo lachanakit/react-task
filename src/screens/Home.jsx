@@ -1,6 +1,6 @@
 import React from 'react'
 import Footer from '../components/Footer'
-import task from '../assets/taskpic.png'
+import task from '../assets/task.png'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
@@ -25,7 +25,7 @@ function Home() {
       swalalerts('Please Input Secret Code')
       return;
     }
-    if (secretcode.toLowerCase() === 'dtisau') {
+    if (secretcode.toLowerCase() === 'sau') {
       //window.location.href = '/showall'
       navigate('/showall')
     }

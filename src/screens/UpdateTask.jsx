@@ -1,17 +1,38 @@
 import React from 'react'
 import Footer from '../components/Footer'
-import taskluno from '../assets/taskpic.png'
-import { Link } from 'react-router-dom'
-import { useState } from 'react'
+import taskluno from '../assets/task.png'
+import { Link, useParams } from 'react-router-dom'
+import { useState,useEffect } from 'react'
 import { supabase } from '../libs/supabaseClient.js'
+import { useNavigate } from 'react-router-dom'
 
 function UpdateTask() {
-  // const { id } = useParams
+  const { id } = useParams()
+  const navigate = useNavigate()
   const [Title, setTitle] = useState('')
   const [Detail, setDetail] = useState('')
   const [Completed, setCompleted] = useState(false)
   const [ImageFE, setImgFile] = useState(null)
   const [ImgPrev, setImgPrev] = useState('')
+
+  useEffect(() => {
+    const fetchTask = async () => {
+      const { data, error } = await supabase.from('lachaDB').select('*').eq('id', id).single()
+
+      if (error) {
+        alert('Fail To Fetch Pls Try again later')
+        return;
+      } else {
+        //เอาข้อมูลที่ได้มาไปกำหนดให้กับ state
+        setTitle(data.Title)
+        setDetail(data.Detail)
+        setCompleted(data.Completed)
+        setImgPrev(data.ImageURL)
+      }
+    }
+
+    fetchTask()
+  }, [])
 
   const ImgSelect = (e) => {
     const file = e.target.files[0]
@@ -29,17 +50,18 @@ function UpdateTask() {
       alert('Please Input All the data')
       return;
     }
-    
+
     let ImgURL = ''
+
     if (ImageFE) {
       const ImgName = ImgPrev.split('/').pop()
       await supabase.storage.from('lachaDB-bk').remove([ImgName])
-      
+
       let NewImgName = `${Date.now()}_${ImageFE.name}`
       const { error } = await supabase.storage
         .from('lachaDB-bk')
         .upload(NewImgName, ImageFE)
-        
+
       if (error) {
         alert("Upload Error Please try again")
         return;
@@ -49,6 +71,23 @@ function UpdateTask() {
           .getPublicUrl(NewImgName)
         ImgURL = data.publicUrl
       }
+    }
+    const { error } = await supabase
+      .from('lachaDB')
+      .update({
+        Title: Title,
+        Detail: Detail,
+        Completed: Completed,
+        ImageURL: ImgURL
+      })
+      .eq('id', id)
+
+    if (error) {
+      alert('เกิดข้อผิดพลาดในการบันทึกแก้ไขข้อมูล กรุณาลองใหม่อีกครั้ง!!!')
+      return
+    } else {
+      alert('บันทึกแก้ไขข้อมูลเรียบร้อยแล้ว!!!')
+      navigate('/showall')
     }
   }
 

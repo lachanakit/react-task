@@ -1,13 +1,13 @@
 import React from 'react'
 import Footer from '../components/Footer'
-import taskluno from '../assets/taskpic.png'
+import taskluno from '../assets/task.png'
 import { Link } from 'react-router-dom'
 import { useState } from 'react'
 import { supabase } from '../libs/supabaseClient.js'
 import { useNavigate } from 'react-router-dom'
 
 function AddTask() {
-  const navigate = useNavigate()  
+  const navigate = useNavigate()
   const [ Title, setTitle ] = useState('')
   const [ Detail, setDetail ] = useState('')
   const [ Completed, setCompleted ] = useState(false)
@@ -59,7 +59,8 @@ function AddTask() {
         return
       }else{
         alert("Success")
-        navigate('/showall')
+        // window.location.href = '/showall'
+      navigate('/showall')
       }
   }
 

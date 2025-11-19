@@ -1,6 +1,6 @@
 import React from 'react'
 import Footer from '../components/Footer'
-import taskluno from '../assets/taskpic.png'
+import taskluno from '../assets/task.png'
 import { Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { supabase } from '../libs/supabaseClient.js'
@@ -106,7 +106,7 @@ function ShowAlltask() {
                       day: 'numeric'
                     })}</td>
                     <td className="p-2 border border-teal-600">
-                      <Link to={'/update'} className='text-green-500'>Edit</Link>
+                      <Link to={'/update/'+task.id} className='text-green-500'>Edit</Link>
                       <button className='text-red-500 ml-2 cursor-pointer' onClick={() => DeleteHandle(task.id, task.ImageURL)}>Delete</button>
                     </td>
                   </tr>
